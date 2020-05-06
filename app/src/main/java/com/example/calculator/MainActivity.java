@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText newNumber;
     private EditText result;
 
+    private String pendingOperation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener numListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (operation.getText().toString().equals("=")) {
+                    operation.setText("");
+                    result.setText("");
+                    newNumber.setText("");
+                }
                 Button btn = (Button) view;
                 String buttonText = btn.getText().toString();
                 newNumber.append(buttonText);
@@ -56,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Button btn = (Button) view;
                 String buttonText = btn.getText().toString();
-                operation.setText(buttonText);
-                performOperation();
+                performOperation(buttonText);
             }
         };
 
@@ -73,9 +79,57 @@ public class MainActivity extends AppCompatActivity {
         button9.setOnClickListener(numListener);
 
         buttonDot.setOnClickListener(numListener);
+
+        buttonPlus.setOnClickListener(opListener);
+        buttonMinus.setOnClickListener(opListener);
+        buttonMultiply.setOnClickListener(opListener);
+        buttonDivide.setOnClickListener(opListener);
+        buttonEquals.setOnClickListener(opListener);
     }
 
-    private void performOperation() {
-
+    private void performOperation(String buttonText) {
+        if (result.getText().toString().equals("")) {
+            if (!newNumber.getText().toString().equals("")) {
+                if (!buttonText.equals("=")) {
+                    result.setText(newNumber.getText().toString());
+                    newNumber.setText("");
+                    operation.setText(buttonText);
+                    pendingOperation = buttonText;
+                } else {
+                    result.setText(newNumber.getText().toString());
+                    operation.setText(buttonText);
+                }
+            }
+        } else {
+            if (newNumber.getText().toString().equals("")) {
+                if (!buttonText.equals("=")) {
+                    operation.setText(buttonText);
+                    pendingOperation = buttonText;
+                }
+            } else {
+                double n1 = Double.parseDouble(result.getText().toString());
+                double n2 = Double.parseDouble(newNumber.getText().toString());
+                double ans;
+                switch (pendingOperation) {
+                    case "+":
+                        ans = n1 + n2;
+                        break;
+                    case "-":
+                        ans = n1 - n2;
+                        break;
+                    case "*":
+                        ans = n1 * n2;
+                        break;
+                    case "/":
+                        ans = n1 / n2;
+                        break;
+                    default:
+                        ans = n2;
+                }
+                result.setText(Double.toString(ans));
+                newNumber.setText("");
+                operation.setText(buttonText);
+            }
+        }
     }
 }
