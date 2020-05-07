@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         Button buttonDivide = findViewById(R.id.buttonDivide);
         Button buttonEquals = findViewById(R.id.buttonEquals);
 
+        Button negButton = findViewById(R.id.negButton);
+        Button cancelButton = findViewById(R.id.cancelButton);
+        Button clearButton = findViewById(R.id.clearButton);
+
         View.OnClickListener numListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +78,36 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        View.OnClickListener negListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (newNumber.getText().toString().length() > 0) {
+                    try {
+                        double value = Double.parseDouble(newNumber.getText().toString());
+                        value *= -1;
+                        newNumber.setText(Double.toString(value));
+                    }
+                    catch (NumberFormatException ignored) { }
+                }
+            }
+        };
+
+        View.OnClickListener cancelListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                result.setText("");
+                newNumber.setText("");
+                operation.setText("");
+            }
+        };
+
+        View.OnClickListener clearListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newNumber.setText("");
+            }
+        };
+
         button0.setOnClickListener(numListener);
         button1.setOnClickListener(numListener);
         button2.setOnClickListener(numListener);
@@ -92,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
         buttonMultiply.setOnClickListener(opListener);
         buttonDivide.setOnClickListener(opListener);
         buttonEquals.setOnClickListener(opListener);
+
+        negButton.setOnClickListener(negListener);
+        cancelButton.setOnClickListener(cancelListener);
+        clearButton.setOnClickListener(clearListener);
     }
 
     private void performOperation(String buttonText) {
