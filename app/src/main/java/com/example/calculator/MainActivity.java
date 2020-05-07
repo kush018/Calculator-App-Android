@@ -7,14 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView operation;
     private EditText newNumber;
     private EditText result;
-
-    private String pendingOperation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        View.OnClickListener dotListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (newNumber.getText().toString().length() > 0) {
+                    newNumber.append(".");
+                }
+            }
+        };
+
         View.OnClickListener opListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         button8.setOnClickListener(numListener);
         button9.setOnClickListener(numListener);
 
-        buttonDot.setOnClickListener(numListener);
+        buttonDot.setOnClickListener(dotListener);
 
         buttonPlus.setOnClickListener(opListener);
         buttonMinus.setOnClickListener(opListener);
@@ -90,27 +98,20 @@ public class MainActivity extends AppCompatActivity {
     private void performOperation(String buttonText) {
         if (result.getText().toString().equals("")) {
             if (!newNumber.getText().toString().equals("")) {
-                if (!buttonText.equals("=")) {
-                    result.setText(newNumber.getText().toString());
-                    newNumber.setText("");
-                    operation.setText(buttonText);
-                    pendingOperation = buttonText;
-                } else {
-                    result.setText(newNumber.getText().toString());
-                    operation.setText(buttonText);
-                }
+                result.setText(newNumber.getText().toString());
+                newNumber.setText("");
+                operation.setText(buttonText);
             }
         } else {
             if (newNumber.getText().toString().equals("")) {
                 if (!buttonText.equals("=")) {
                     operation.setText(buttonText);
-                    pendingOperation = buttonText;
                 }
             } else {
                 double n1 = Double.parseDouble(result.getText().toString());
                 double n2 = Double.parseDouble(newNumber.getText().toString());
                 double ans;
-                switch (pendingOperation) {
+                switch (operation.getText().toString()) {
                     case "+":
                         ans = n1 + n2;
                         break;
