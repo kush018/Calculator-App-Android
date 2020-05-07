@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -13,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView operation;
     private EditText newNumber;
     private EditText result;
+
+    private final String TEXT_CONTENTS = "saved-text";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,5 +172,17 @@ public class MainActivity extends AppCompatActivity {
                 operation.setText(buttonText);
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putString(TEXT_CONTENTS, operation.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        operation.setText(savedInstanceState.getString(TEXT_CONTENTS));
     }
 }
